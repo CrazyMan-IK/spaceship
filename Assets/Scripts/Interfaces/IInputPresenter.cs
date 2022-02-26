@@ -10,5 +10,11 @@ namespace Astetrio.Spaceship.Interfaces
         Vector3 Direction { get; }
         Vector2 Rotation { get; }
         IReadOnlyDictionary<KeyCode, bool> Keys { get; }
+        IReadOnlyDictionary<KeyCode, bool> KeysPressedInCurrentFrame { get; }
+        IReadOnlyDictionary<KeyCode, bool> KeysReleasedInCurrentFrame { get; }
+        bool IsEnabled { get; }
+
+        void Enable();
+        void Disable();
     }
 }

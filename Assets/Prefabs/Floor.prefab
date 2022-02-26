@@ -15,13 +15,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConnectionPointRight (Small)
       objectReference: {fileID: 0}
+    - target: {fileID: 1055558067924534050, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: ConnectionPointFront
+      objectReference: {fileID: 0}
     - target: {fileID: 1737053093636814827, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
       propertyPath: m_Name
       value: ConnectionPointFront (Small)
       objectReference: {fileID: 0}
+    - target: {fileID: 3180153783359161111, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: InternalConnectionPointBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4139400182855722570, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: InternalConnectionPointLeft
+      objectReference: {fileID: 0}
     - target: {fileID: 5208336189173006185, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
       propertyPath: m_Name
       value: ConnectionPointLeft (Small)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6081442317373085146, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: ConnectionPointLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 6430993369004584093, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: ConnectionPointRight
       objectReference: {fileID: 0}
     - target: {fileID: 6707657744629791321, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
       propertyPath: m_Name
@@ -91,9 +111,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConnectionPointLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 6737532382332564199, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: ConnectionPointBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287880198256479282, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: InternalConnectionPointFront
+      objectReference: {fileID: 0}
     - target: {fileID: 8252466797219966981, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
       propertyPath: _canAutoRotate
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8306655665635702348, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}
+      propertyPath: m_Name
+      value: InternalConnectionPointRight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c08c8e3d40ea21b42a04fe915ada31d6, type: 3}

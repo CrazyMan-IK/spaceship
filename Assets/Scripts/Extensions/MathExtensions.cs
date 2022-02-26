@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Astetrio.Spaceship
+namespace Astetrio.Spaceship.Extensions
 {
     public static class MathExtensions
     {

@@ -5,44 +5,40 @@ using UnityEngine;
 
 namespace Astetrio.Spaceship.Building
 {
-    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Collider))]
     public class ConnectionPoint : MonoBehaviour
     {
         [SerializeField] private bool _canOverlap = true;
+        [SerializeField] private Vector3 _colliderOffset = Vector3.zero;
 
-        private BoxCollider _collider = null;
+        private Collider _collider = null;
 
         private void Awake()
         {
-            _collider = GetComponent<BoxCollider>();
+            _collider = GetComponent<Collider>();
         }
 
-        public bool TryGetCollidingConnection(int layerMask, out ConnectionPoint other)
+        public bool TryGetCollidingConnection(int layerMask, out List<ConnectionPoint> others)
         {
+            others = new List<ConnectionPoint>();
+
             if (!_canOverlap)
             {
-                other = null;
                 return false;
             }
 
-            //var results = Physics.OverlapBox(transform.position + transform.rotation * _collider.center + transform.forward * 0.1f, Vector3.Scale(_collider.size, transform.lossyScale) / 2.01f, transform.rotation, layerMask);
-            //var results1 = Physics.OverlapBox(transform.position + transform.rotation * _collider.center + transform.forward * 0.1f, Vector3.Scale(_collider.size, transform.lossyScale) / 2.01f, transform.rotation, layerMask);
-            //var results2 = Physics.OverlapBox(transform.position + transform.rotation * _collider.center + transform.forward * 0.5f, Vector3.one * 0.25f, transform.rotation, layerMask);
-            var results = Physics.OverlapSphere(transform.position + transform.rotation * _collider.center + transform.forward * 0.2f, 0.1f, layerMask);
-
-            //var results = results1.Concat(results2).ToArray();
+            var results = Physics.OverlapSphere(transform.position + transform.rotation * _colliderOffset + transform.forward * 0.5f, 0.1f, layerMask);
 
             if (results.Length > 0)
             {
-                var collidingConnections = results.Select(x => x?.GetComponent<ConnectionPoint>()).Where(x => x != null && x.transform.parent != transform.parent).ToList();
+                var collidingConnections = results.Select(x => x.GetComponent<ConnectionPoint>()).Where(x => x != null && x.transform.parent != transform.parent).ToList();
                 if (collidingConnections.Count > 0)
                 {
-                    other = collidingConnections.First();
+                    others = collidingConnections;
                     return true;
                 }
             }
 
-            other = null;
             return false;
         }
 

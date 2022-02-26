@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using Astetrio.Spaceship.Extensions;
 
 namespace Astetrio.Spaceship.Building
 {
@@ -10,8 +8,11 @@ namespace Astetrio.Spaceship.Building
     [RequireComponent(typeof(Block))]
     public class Ghost : MonoBehaviour
     {
-        [SerializeField] private Connector _connectorPrefab = null;
         [SerializeField] private Material _normalMaterial = null;
+        [SerializeField] private LayerMask _defaultMask = default;
+        [SerializeField] private LayerMask _withoutCollisionsMask = default;
+        [SerializeField] private BoxCollider _outerCollider = null;
+        [SerializeField] private GameObject _connectionsParent = null;
 
         private BoxCollider _collider = null;
         private Renderer _renderer = null;
@@ -37,26 +38,16 @@ namespace Astetrio.Spaceship.Building
         }
 
         public void Paste(Transform parent, int layerMask)
-        {
+        {   
             var newBlock = Instantiate(this, transform.position, transform.rotation, parent);
 
             newBlock.Show();
-            SetLayerRecursively(newBlock.gameObject, LayerMask.NameToLayer("Default"));
+            /*SetLayerRecursively(newBlock.gameObject, LayerMask.NameToLayer("Default"));
+            newBlock.gameObject.layer = _defaultMask >> 1;*/
+            SetLayerRecursively(newBlock._connectionsParent, LayerMask.NameToLayer("Default"));
+            newBlock._outerCollider.gameObject.layer = _withoutCollisionsMask.GetLayer();
+            newBlock.gameObject.layer = _defaultMask.GetLayer();
             newBlock._renderer.material = _normalMaterial;
-
-            foreach (var point in newBlock.Block.Connections)
-            {
-                if (point.TryGetCollidingConnection(layerMask, out var connection))
-                {
-                    var otherBlock = connection.GetComponentInParent<Block>();
-
-                    //var connector = Instantiate(_connectorPrefab, (transform.position + otherBlock.transform.position) / 2, Quaternion.LookRotation(transform.position - otherBlock.transform.position, otherBlock.transform.forward), parent);
-                    //var connector = Instantiate(_connectorPrefab, point.transform.position, Quaternion.LookRotation(transform.position - otherBlock.transform.position, otherBlock.transform.forward), parent);
-                    //var connector = Instantiate(_connectorPrefab, point.transform.position, point.transform.rotation * Quaternion.AngleAxis(90, Vector3.right), parent);
-                    var connector = Instantiate(_connectorPrefab, point.transform.position, Quaternion.identity, parent);
-                    connector.Connect(newBlock.Block, otherBlock);
-                }
-            }
 
             Destroy(newBlock);
 
@@ -65,7 +56,7 @@ namespace Astetrio.Spaceship.Building
 
         public bool IsCollideWithAnything(int layerMask)
         {
-            return Physics.CheckBox(transform.position + _collider.center, Vector3.Scale(_collider.size, transform.lossyScale) / 2.01f, transform.rotation, layerMask, QueryTriggerInteraction.Ignore);
+            return Physics.OverlapBox(transform.position + _collider.center, Vector3.Scale(_collider.size, transform.lossyScale) / 2.01f, transform.rotation, layerMask, QueryTriggerInteraction.Ignore).Length > 0;
         }
 
         private void SetLayerRecursively(GameObject go, int layerMask)

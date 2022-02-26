@@ -332,8 +332,8 @@ MonoBehaviour:
   active: 0
   m_AdvancedMode: 0
   mode:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 2
 --- !u!114 &2084597083006413498
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -387,12 +387,12 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   temperature:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 25
     min: -100
     max: 100
   tint:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
     min: -100
     max: 100

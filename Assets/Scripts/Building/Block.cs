@@ -32,7 +32,7 @@ namespace Astetrio.Spaceship.Building
                 return null;
             }
 
-            var closest = _connections[0];
+            ConnectionPoint closest = null;
             var closestDistance = float.MaxValue;
             foreach (var connection in _connections)
             {
