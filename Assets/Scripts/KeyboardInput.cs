@@ -44,14 +44,14 @@ namespace Astetrio.Spaceship
 
         private void Update()
         {
+            var x = Input.GetAxis(_HorizontalAxisName);
+            var y = Input.GetAxis(_DepthAxisName);
+            var z = Input.GetAxis(_VerticalAxisName);
+
+            Direction = new Vector3(x, y, z).normalized;
+
             if (IsEnabled)
             {
-                var x = Input.GetAxis(_HorizontalAxisName);
-                var y = Input.GetAxis(_DepthAxisName);
-                var z = Input.GetAxis(_VerticalAxisName);
-
-                Direction = new Vector3(x, y, z).normalized;
-
                 var mx = Input.GetAxis(_MouseXAxisName);
                 var my = Input.GetAxis(_MouseYAxisName);
 
@@ -59,7 +59,6 @@ namespace Astetrio.Spaceship
             }
             else
             {
-                Direction = Vector3.zero;
                 Rotation = Vector2.zero;
             }
 
