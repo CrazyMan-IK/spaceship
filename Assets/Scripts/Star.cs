@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using URandom = UnityEngine.Random;
 
@@ -25,6 +26,21 @@ namespace Astetrio.Spaceship
 
             _basePosition = transform.position;
             _baseScale = transform.localScale;
+
+            if (!enabled)
+            {
+                DisableRenderers();
+            }
+        }
+
+        private void OnEnable()
+        {
+            EnableRenderers();
+        }
+
+        private void OnDisable()
+        {
+            DisableRenderers();
         }
 
         private void LateUpdate()
@@ -34,12 +50,38 @@ namespace Astetrio.Spaceship
                 return;
             }
 
+            /*Func<double, double> easing = Easing.Lerp;
+            if (Input.GetKey(KeyCode.Z))
+            {
+                easing = Easing.ExpoIn;
+            }
+            if (Input.GetKey(KeyCode.X))
+            {
+                easing = Easing.ExpoOut;
+            }
+            if (Input.GetKey(KeyCode.C))
+            {
+                easing = Easing.SineOutIn;
+            }
+            if (Input.GetKey(KeyCode.V))
+            {
+                easing = Easing.QuadOutIn;
+            }
+            if (Input.GetKey(KeyCode.B))
+            {
+                easing = Easing.CubicOutIn;
+            }
+            if (Input.GetKey(KeyCode.N))
+            {
+                easing = Easing.ExpoOutIn;
+            }*/
+
             var baseDistance = DVector3.Distance(_basePosition, _target.position);
 
             if (baseDistance > _maxDistance)
             {
                 var multiplier = _maxDistance / baseDistance;
-                if (multiplier <= 0.385f)
+                if (multiplier <= 0.26f)
                 {
                     DisableRenderers();
 
@@ -51,7 +93,8 @@ namespace Astetrio.Spaceship
                 direction.Normalize();
 
                 transform.position = (Vector3)(_basePosition + direction * (baseDistance - _maxDistance));
-                transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(multiplier, 0), 1), 0) * multiplier) * _baseScale;
+                //transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(easing(multiplier), 0), 1), 0) * multiplier) * _baseScale;
+                transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutIn(multiplier), 0) * multiplier) * _baseScale;
             }
             else
             {
