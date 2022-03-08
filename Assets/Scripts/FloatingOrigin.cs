@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -133,22 +134,9 @@ namespace Astetrio.Spaceship
         }
     }*/
 
+    [DefaultExecutionOrder(-999)]
     public class FloatingOrigin : MonoBehaviour
     {
-        public static FloatingOrigin Instance;
-
-        // Largest value allowed for the main camera's X or Z coordinate before that
-        // coordinate is moved by the same amount towards 0 (which updates offset).
-        // Pick a power of two for this, as floating point precision (the thing
-        // we are trying to regulate) decreases with every successive power of two.
-        public const float ThresholdValue = (float)Threshold._4;
-
-        private ParticleSystem.Particle[] _parts = null;
-        private Transform _anchor;
-
-        // The origin is offset by offset * threshold
-        public (byte x, byte y, byte z) Offset { get; private set; } = (0, 0, 0);
-
         public enum Threshold
         {
             _2 = 2,
@@ -163,20 +151,32 @@ namespace Astetrio.Spaceship
             _1024 = 1024
         }
 
+        public static FloatingOrigin Instance { get; private set; }
+
+        // Largest value allowed for the main camera's X or Z coordinate before that
+        // coordinate is moved by the same amount towards 0 (which updates offset).
+        // Pick a power of two for this, as floating point precision (the thing
+        // we are trying to regulate) decreases with every successive power of two.
+        public const float ThresholdValue = (float)Threshold._1024;
+
+        public event Action Shifted = null;
+
+        private ParticleSystem.Particle[] _parts = null;
+        private Transform _anchor;
+
+        // The origin is offset by offset * threshold
+        public (byte x, byte y, byte z) Offset { get; private set; } = (0, 0, 0);
+
         public void OnEnable()
         {
             // Ensure singleton
             if (Instance != null)
             {
                 Destroy(gameObject);
-                throw new System.Exception(
-                    "More than one instance of singleton detected."
-                );
+                throw new Exception("More than one instance of singleton detected.");
             }
-            else
-            {
-                Instance = this;
-            }
+
+            Instance = this;
         }
 
         public void LateUpdate()
@@ -219,6 +219,8 @@ namespace Astetrio.Spaceship
                 return;
             }
 
+            Shifted?.Invoke();
+
             float times = Mathf.Floor(Mathf.Abs(value) / ThresholdValue);
             float offsetSign = Mathf.Sign(value) * -1f;
 
@@ -233,7 +235,7 @@ namespace Astetrio.Spaceship
 
             // Offset scene root objects
 
-            GameObject[] objects = UnityEngine.SceneManagement.SceneManager
+            GameObject[] objects = SceneManager
                 .GetActiveScene().GetRootGameObjects();
 
             foreach (var o in objects)

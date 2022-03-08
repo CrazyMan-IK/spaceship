@@ -20,7 +20,17 @@ namespace Astetrio.Spaceship
         {
             _starPrefab.enabled = false;
 
-            StartGeneration(Vector3Int.zero, 5);
+            StartGeneration(Vector3Int.zero, 15);
+        }
+
+        private void OnEnable()
+        {
+            FloatingOrigin.Instance.Shifted += OnFloatingOriginShifted;
+        }
+
+        private void OnDisable()
+        {
+            FloatingOrigin.Instance.Shifted -= OnFloatingOriginShifted;
         }
 
         public void StartGeneration(Vector3Int position, int additionalSeed)
@@ -72,6 +82,18 @@ namespace Astetrio.Spaceship
 
         private IEnumerator GenerateMultiple(Vector3Int position, int additionalSeed)
         {
+            var oldStars = _stars.ToList();
+            foreach (var star in oldStars)
+            {
+                if (!star.IsActive)
+                {
+                    Destroy(star.gameObject);
+                    _stars.Remove(star);
+                }
+            }
+
+            yield return null;
+
             yield return StartCoroutine(Generate(Vector3.zero, position, additionalSeed));
             yield return StartCoroutine(Generate(Vector3.forward * 131072, position, additionalSeed));
             yield return StartCoroutine(Generate(Vector3.back * 131072, position, additionalSeed));
@@ -155,6 +177,11 @@ namespace Astetrio.Spaceship
 
                 Physics.SyncTransforms();
             }
+        }
+
+        private void OnFloatingOriginShifted()
+        {
+            StartGeneration(Vector3Int.zero, 15);
         }
     }
 }

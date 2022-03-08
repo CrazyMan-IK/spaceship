@@ -20,6 +20,8 @@ namespace Astetrio.Spaceship
         private DVector3 _basePosition = DVector3.Zero;
         private Vector3 _baseScale = Vector3.zero;
 
+        public bool IsActive { get; private set; }
+
         private void Awake()
         {
             GetComponentsInChildren(_renderers);
@@ -83,10 +85,13 @@ namespace Astetrio.Spaceship
                 var multiplier = _maxDistance / baseDistance;
                 if (multiplier <= 0.26f)
                 {
+                    IsActive = false;
                     DisableRenderers();
 
                     return;
                 }
+
+                IsActive = true;
                 EnableRenderers();
 
                 var direction = _target.position - _basePosition;
@@ -94,7 +99,14 @@ namespace Astetrio.Spaceship
 
                 transform.position = (Vector3)(_basePosition + direction * (baseDistance - _maxDistance));
                 //transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(easing(multiplier), 0), 1), 0) * multiplier) * _baseScale;
-                transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutIn(multiplier), 0) * multiplier) * _baseScale;
+                if (Input.GetKey(KeyCode.F))
+                {
+                    transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
+                }
+                else
+                {
+                    transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutIn(multiplier), 0) * multiplier) * _baseScale;
+                }
             }
             else
             {
@@ -139,6 +151,7 @@ namespace Astetrio.Spaceship
         private void UpdateTrigger()
         {
             _spawnCollision.radius = _triggerSize / transform.localScale.x;
+            _spawnCollision.center = (Vector3)(_basePosition - transform.position) / transform.localScale.x;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Astetrio.Spaceship.Items
     public class Item : MonoBehaviour
     {
         [SerializeField] private InterfaceReference<IItemInformationPresenter> _itemInformation = null;
+        [SerializeField] private MeshRenderer _lodRenderer = null;
 
         private MeshFilter _meshFilter = null;
         private MeshRenderer _meshRenderer = null;
@@ -45,6 +46,7 @@ namespace Astetrio.Spaceship.Items
 
             _meshFilter.sharedMesh = _information.Mesh;
             _meshRenderer.sharedMaterials = _information.Materials.ToArray();
+            _lodRenderer.sharedMaterials = _meshRenderer.sharedMaterials;
             _meshCollider.sharedMesh = _information.Mesh;
             _boxCollider.center = _information.Mesh.bounds.center;
             _boxCollider.size = _information.Mesh.bounds.size * 1.5f;

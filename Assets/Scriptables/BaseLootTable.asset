@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d7b295bab6a9814c97791bc82b7f983, type: 3}
-  m_Name: TestChansedRandom
+  m_Name: BaseLootTable
   m_EditorClassIdentifier: 
   _items:
   - {fileID: 11400000, guid: 407b720e4ce140d4997323ccd6cb15d3, type: 2}
+  - {fileID: 11400000, guid: 94cc975041fc9404f8befe5bdedea782, type: 2}
   - {fileID: 11400000, guid: d4a858c6f7fa56747b07289d6f98a1a3, type: 2}
   - {fileID: 11400000, guid: e7e2ae9cc9700954689084c1f8713bf6, type: 2}
   - {fileID: 11400000, guid: 0643779ace3e1a342867db3db79621c9, type: 2}
   - {fileID: 11400000, guid: 8a2ed5d0a7580164898cb872045f3ebf, type: 2}
   _probability:
-  - 80
+  - 70
+  - 10
   - 15
   - 2
   - 2

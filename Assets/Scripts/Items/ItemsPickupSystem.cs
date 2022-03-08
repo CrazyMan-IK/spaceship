@@ -11,7 +11,7 @@ namespace Astetrio.Spaceship.Items
 {
     public class ItemsPickupSystem : MonoBehaviour
     {
-        [SerializeField] private OutlineLayerCollection _highLightLayerCollection = null;
+        [SerializeField] private OutlineLayerCollection _highlightLayerCollection = null;
         [SerializeField] private InterfaceReference<IInputPresenter> _input = null;
         [SerializeField] private TextMeshProUGUI _itemNameText = null;
         [SerializeField] private Inventory _inventory = null;
@@ -26,7 +26,7 @@ namespace Astetrio.Spaceship.Items
 
         private void Update()
         {
-            var layer = _highLightLayerCollection.GetOrAddLayer(0);
+            var layer = _highlightLayerCollection.GetOrAddLayer(0);
             layer.Clear();
             _itemNameText.text = "";
 

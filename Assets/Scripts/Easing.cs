@@ -270,6 +270,27 @@ public static class Easing
         return OutIn(Expo, t, 0, 1);
     }
 
+    public static double ExpoOutInOptimized(double t)
+    {
+        if (t >= 1)
+        {
+            return 1;
+        }
+        if (t <= 0)
+        {
+            return 0;
+        }
+
+        if (t < 0.5)
+        {
+            //return 0.5 - 0.5 * Expo(1 - t * 2, 1);
+            return 0.5 - 0.5 * Math.Pow(1048576, -t);
+        }
+
+        //return 0.5 * Expo((t * 2) - 1, 1) + 0.5;
+        return 0.5 * Math.Pow(1024, 2 * t - 2) + 0.5;
+    }
+
     public static double CircIn(double t)
     {
         return In(Circ, t, 0, 1);
