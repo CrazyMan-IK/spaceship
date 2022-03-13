@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Astetrio.Spaceship.Interfaces;
+using System;
 
 namespace VariableInventorySystem
 {
-    public interface IVariableInventoryCellData
+    public interface ICellData
     {
+        IItemInformation Information { get; }
         int Id { get; }
         int Width { get; }
         int Height { get; }
@@ -14,8 +16,8 @@ namespace VariableInventorySystem
         bool IsEmpty { get; }
         IVariableInventoryAsset ImageAsset { get; }
 
-        void Merge(IVariableInventoryCellData other, Quantity quantity);
-        bool CanInsert(IVariableInventoryCellData other, Quantity quantity);
-        IVariableInventoryCellData Clone(int count);
+        void Merge(ICellData other, Quantity quantity);
+        bool CanInsert(ICellData other, Quantity quantity);
+        ICellData Clone(int count);
     }
 }

@@ -9,21 +9,21 @@ namespace VariableInventorySystem
     public class StandardStashViewData : IVariableInventoryViewData
     {
         public bool IsDirty { get; set; }
-        public IVariableInventoryCellData[] CellData { get; }
+        public ICellData[] CellData { get; }
 
         public int CapacityWidth { get; }
         public int CapacityHeight { get; }
 
-        private readonly IVariableInventoryCellData[] _prevCellData;
+        private readonly ICellData[] _prevCellData;
         private readonly bool[] _prevMask;
         private readonly bool[] _mask;
 
         public StandardStashViewData(int capacityWidth, int capacityHeight)
-            : this(new IVariableInventoryCellData[capacityWidth * capacityHeight], capacityWidth, capacityHeight)
+            : this(new ICellData[capacityWidth * capacityHeight], capacityWidth, capacityHeight)
         {
         }
 
-        public StandardStashViewData(IVariableInventoryCellData[] cellData, int capacityWidth, int capacityHeight)
+        public StandardStashViewData(ICellData[] cellData, int capacityWidth, int capacityHeight)
         {
             Debug.Assert(cellData.Length == capacityWidth * capacityHeight);
 
@@ -39,7 +39,12 @@ namespace VariableInventorySystem
             UpdateMask();
         }
 
-        public virtual int? GetId(IVariableInventoryCellData cellData)
+        public virtual ICellData GetCell(int id)
+        {
+            return CellData[id];
+        }
+
+        public virtual int? GetId(ICellData cellData)
         {
             for (var i = 0; i < CellData.Length; i++)
             {
@@ -52,7 +57,7 @@ namespace VariableInventorySystem
             return null;
         }
 
-        public virtual int? GetInsertableId(IVariableInventoryCellData cellData)
+        public virtual int? GetInsertableId(ICellData cellData)
         {
             if (cellData == null)
             {
@@ -87,7 +92,7 @@ namespace VariableInventorySystem
             return null;
         }
 
-        public virtual void InsertInventoryItem(int id, IVariableInventoryCellData cellData)
+        public virtual void InsertInventoryItem(int id, ICellData cellData)
         {
             if (CellData[id] == cellData)
             {
@@ -125,7 +130,7 @@ namespace VariableInventorySystem
             }
         }
 
-        public virtual bool CheckInsert(int id, IVariableInventoryCellData cellData, bool autoRotate = true)
+        public virtual bool CheckInsert(int id, ICellData cellData, bool autoRotate = true)
         {
             return CheckInsert(id, cellData, _mask, autoRotate);
         }
@@ -164,7 +169,7 @@ namespace VariableInventorySystem
             }
         }
 
-        protected (int, int) GetRotateSize(IVariableInventoryCellData cell)
+        protected (int, int) GetRotateSize(ICellData cell)
         {
             if (cell == null)
             {
@@ -174,7 +179,7 @@ namespace VariableInventorySystem
             return (cell.IsRotate ? cell.Height : cell.Width, cell.IsRotate ? cell.Width : cell.Height);
         }
 
-        private bool CheckInsert(int id, IVariableInventoryCellData cellData, bool[] mask, bool autoRotate = true)
+        private bool CheckInsert(int id, ICellData cellData, bool[] mask, bool autoRotate = true)
         {
             if (CellData[id]?.CanInsert(cellData, new Quantity(1)) ?? false)
             {

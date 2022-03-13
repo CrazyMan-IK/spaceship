@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Animations;
 using URandom = UnityEngine.Random;
 
 namespace Astetrio.Spaceship
@@ -11,6 +12,7 @@ namespace Astetrio.Spaceship
     public class Star : MonoBehaviour
     {
         [SerializeField] private SphereCollider _spawnCollision = null;
+        [SerializeField] private Light _light = null;
         [SerializeField] private Transform _target = null;
         [SerializeField] private float _triggerSize = 6144;
         [SerializeField] private float _maxDistance = 16384;
@@ -82,6 +84,8 @@ namespace Astetrio.Spaceship
 
             if (baseDistance > _maxDistance)
             {
+                _light.gameObject.SetActive(false);
+
                 var multiplier = _maxDistance / baseDistance;
                 if (multiplier <= 0.26f)
                 {
@@ -99,19 +103,14 @@ namespace Astetrio.Spaceship
 
                 transform.position = (Vector3)(_basePosition + direction * (baseDistance - _maxDistance));
                 //transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(easing(multiplier), 0), 1), 0) * multiplier) * _baseScale;
-                if (Input.GetKey(KeyCode.F))
-                {
-                    transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
-                }
-                else
-                {
-                    transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutIn(multiplier), 0) * multiplier) * _baseScale;
-                }
+                transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
             }
             else
             {
                 transform.position = (Vector3)_basePosition;
                 transform.localScale = _baseScale;
+
+                _light.gameObject.SetActive(true);
             }
 
             UpdateTrigger();
@@ -120,6 +119,8 @@ namespace Astetrio.Spaceship
         public void Initialize(Transform target)
         {
             _target = target;
+
+            _light.GetComponent<LookAtConstraint>().SetSource(0, new ConstraintSource() { sourceTransform = _target, weight = 1 });
 
             if (enabled)
             {

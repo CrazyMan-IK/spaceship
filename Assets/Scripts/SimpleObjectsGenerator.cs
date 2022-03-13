@@ -7,7 +7,7 @@ using Astetrio.Spaceship.Interfaces;
 
 namespace Astetrio.Spaceship
 {
-    public class SimpleObjectsGenerator : MonoBehaviour, IStarsGenerator
+    public class SimpleObjectsGenerator : MonoBehaviour
     {
         [SerializeField] private Transform _target = null;
         [SerializeField] private List<Transform> _objectsPrefabs = null;
@@ -94,7 +94,7 @@ namespace Astetrio.Spaceship
                     continue;
                 }
 
-                var obj = Instantiate(prefab, targetPosition, Quaternion.identity, _objectsRoot);
+                var obj = Instantiate(prefab, targetPosition, URandom.rotation, _objectsRoot);
 
                 _objects.Add(obj);
 

@@ -4,7 +4,7 @@ using Astetrio.Spaceship.Interfaces;
 
 namespace Astetrio.Spaceship.InventorySystem
 {
-    public class CustomItemCellData : IVariableInventoryCellData
+    public class CustomItemCellData : ICellData
     {
         private readonly IItemInformation _item = null;
 
@@ -27,7 +27,7 @@ namespace Astetrio.Spaceship.InventorySystem
             Count = count;
         }
 
-        public IItemInformation Item => _item;
+        public IItemInformation Information => _item;
         public int Id => GetHashCode();
         public int Width => _item.CellSize.x;
         public int Height => _item.CellSize.y;
@@ -38,7 +38,7 @@ namespace Astetrio.Spaceship.InventorySystem
         public bool IsEmpty => Count <= 0;
         public IVariableInventoryAsset ImageAsset { get; }
 
-        public void Merge(IVariableInventoryCellData other, Quantity quantity)
+        public void Merge(ICellData other, Quantity quantity)
         {
             var newCount = Count + other.Count * quantity.Value;
 
@@ -50,7 +50,7 @@ namespace Astetrio.Spaceship.InventorySystem
             Count = newCount;
         }
 
-        public bool CanInsert(IVariableInventoryCellData other, Quantity quantity)
+        public bool CanInsert(ICellData other, Quantity quantity)
         {
             var newCount = Count + other.Count * quantity.Value;
 
@@ -62,7 +62,7 @@ namespace Astetrio.Spaceship.InventorySystem
             return false;
         }
 
-        public IVariableInventoryCellData Clone(int count)
+        public ICellData Clone(int count)
         {
             if (count < 0)
             {
@@ -76,7 +76,7 @@ namespace Astetrio.Spaceship.InventorySystem
             };
         }
 
-        private bool CanInsert(IVariableInventoryCellData other, int newCount)
+        private bool CanInsert(ICellData other, int newCount)
         {
             return other != null && Id == other.Id && newCount >= 0 && newCount <= StackSize;
         }

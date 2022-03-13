@@ -32,6 +32,15 @@ namespace AYellowpaper.Editor
 		private static void GetObjectAndInterfaceType(Type fieldType, out Type objectType, out Type interfaceType)
 		{
 			var genericType = fieldType.GetGenericTypeDefinition();
+			if (genericType == typeof(List<>))
+            {
+				fieldType = fieldType.GenericTypeArguments[0];
+				genericType = fieldType.GetGenericTypeDefinition();
+            }
+			if (genericType == typeof(InterfaceReference<>))
+            {
+				genericType = genericType.BaseType;
+            }
 			if (genericType == typeof(InterfaceReference<,>))
 			{
 				var types = fieldType.GetGenericArguments();

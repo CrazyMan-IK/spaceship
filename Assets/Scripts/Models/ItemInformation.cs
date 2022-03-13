@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VariableInventorySystem;
 using Astetrio.Spaceship.Interfaces;
+using Astetrio.Spaceship.InventorySystem;
 
 namespace Astetrio.Spaceship.Models
 {
@@ -21,6 +23,16 @@ namespace Astetrio.Spaceship.Models
         public Sprite Icon => _icon;
         public Mesh Mesh => _mesh;
         public List<Material> Materials => _materials;
+
+        public ICellData AsCellData()
+        {
+            return new CustomItemCellData(this);
+        }
+
+        public ICellData AsCellData(int count)
+        {
+            return new CustomItemCellData(this, count);
+        }
 
         public IItemInformation GetInformation()
         {

@@ -6,7 +6,7 @@ namespace VariableInventorySystem
     public abstract class VariableInventoryCell : MonoBehaviour, IVariableInventoryCell
     {
         public RectTransform RectTransform => (RectTransform)transform;
-        public IVariableInventoryCellData CellData { get; protected set; }
+        public ICellData CellData { get; protected set; }
 
         public virtual Vector2 DefaultCellSize { get; set; }
         public virtual Vector2 MargineSpace { get; set; }
@@ -30,7 +30,7 @@ namespace VariableInventorySystem
                 () => onPointerUp?.Invoke(this));
         }
 
-        public void Apply(IVariableInventoryCellData cellData)
+        public void Apply(ICellData cellData)
         {
             CellData = cellData;
             OnApply();

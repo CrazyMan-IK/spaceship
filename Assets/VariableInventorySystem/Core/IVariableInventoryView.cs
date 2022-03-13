@@ -5,17 +5,21 @@ namespace VariableInventorySystem
 {
     public interface IVariableInventoryView
     {
+        IVariableInventoryViewData ViewData { get; }
+
         void SetCellCallback(
             Action<IVariableInventoryCell> onCellClick,
             Action<IVariableInventoryCell> onCellOptionClick,
             Action<IVariableInventoryCell> onCellEnter,
             Action<IVariableInventoryCell> onCellExit);
 
+        int? GetEffectCellID();
+
         void Apply(IVariableInventoryViewData data);
         void ReApply();
 
         void OnPrePick(IVariableInventoryCell stareCell);
-        IVariableInventoryCellData OnPick(IVariableInventoryCell stareCell, PointerEventData.InputButton button);
+        ICellData OnPick(IVariableInventoryCell stareCell, PointerEventData.InputButton button);
         void OnDrag(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell, PointerEventData cursorPosition);
         bool? OnDrop(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell);
         void OnDroped(bool? isDroped);

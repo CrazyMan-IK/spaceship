@@ -6,10 +6,11 @@ namespace VariableInventorySystem
     {
         bool IsDirty { get; set; }
 
-        int? GetId(IVariableInventoryCellData cellData);
-        int? GetInsertableId(IVariableInventoryCellData cellData);
-        void InsertInventoryItem(int id, IVariableInventoryCellData cellData);
+        ICellData GetCell(int id);
+        int? GetId(ICellData cellData);
+        int? GetInsertableId(ICellData cellData);
+        void InsertInventoryItem(int id, ICellData cellData);
         void Apply();
-        bool CheckInsert(int id, IVariableInventoryCellData cellData, bool autoRotate = true);
+        bool CheckInsert(int id, ICellData cellData, bool autoRotate = true);
     }
 }

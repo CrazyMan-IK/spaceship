@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using AYellowpaper;
+using Astetrio.Spaceship.Interfaces;
 
 namespace VariableInventorySystem
 {
-    public abstract class VariableInventoryCore<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler where T : IVariableInventoryCellData
+    public abstract class VariableInventoryCore<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler where T : ICellData
     {
         public event Action<T> DropedOutside = null;
 
@@ -19,10 +20,20 @@ namespace VariableInventorySystem
         protected IVariableInventoryCell stareCell;
         protected IVariableInventoryCell effectCell;
 
-        bool? originEffectCellRotate;
-        Vector2 cursorPosition;
+        private readonly List<IRecipe> _recipes = new List<IRecipe>();
+        private bool? originEffectCellRotate;
+        private Vector2 cursorPosition;
 
         private bool _isClicked = false;
+
+        protected IReadOnlyList<IRecipe> Recipes => _recipes;
+
+        private void Start()
+        {
+            effectCell = Instantiate(CellPrefab.UnderlyingValue, EffectCellParent) as IVariableInventoryCell;
+            effectCell.RectTransform.gameObject.SetActive(false);
+            effectCell.SetSelectable(false);
+        }
 
         private void Update()
         {
@@ -91,11 +102,9 @@ namespace VariableInventorySystem
             }
         }
 
-        public virtual void Initialize()
+        public virtual void Initialize(List<IRecipe> recipes)
         {
-            effectCell = Instantiate(CellPrefab.UnderlyingValue, EffectCellParent) as IVariableInventoryCell;
-            effectCell.RectTransform.gameObject.SetActive(false);
-            effectCell.SetSelectable(false);
+            _recipes.AddRange(recipes);
         }
 
         public virtual void AddInventoryView(IVariableInventoryView variableInventoryView)
@@ -134,7 +143,7 @@ namespace VariableInventorySystem
                 view.OnPrePick(stareCell);
             }
 
-            IVariableInventoryCellData stareData = null;
+            ICellData stareData = null;
 
             bool isHold = false;
             foreach (var view in InventoryViews)
@@ -182,7 +191,7 @@ namespace VariableInventorySystem
             //effectCell.RectTransform.localEulerAngles = Vector3.forward * (effectCell.CellData?.IsRotate ?? false ? 90 : 0);
         }
 
-        (int, int) GetRotateSize(IVariableInventoryCellData cell)
+        (int, int) GetRotateSize(ICellData cell)
         {
             return (cell.IsRotate ? cell.Height : cell.Width, cell.IsRotate ? cell.Width : cell.Height);
         }
@@ -201,7 +210,7 @@ namespace VariableInventorySystem
 
                 if (!result.HasValue)
                 {
-                    DropedOutside?.Invoke((T)effectCell.CellData);
+                    InvokeDropedOutsideEvent((T)effectCell.CellData);
 
                     isRelease = null;
                     break;
@@ -224,6 +233,8 @@ namespace VariableInventorySystem
             {
                 inventoryViews.OnDroped(isRelease);
             }
+
+            //DropedOnCell?.Invoke(stareCell, effectCell);
 
             effectCell.RectTransform.gameObject.SetActive(false);
             effectCell.Apply(null);
@@ -255,6 +266,11 @@ namespace VariableInventorySystem
             {
                 inventoryViews.OnSwitchRotate(stareCell, effectCell);
             }
+        }
+
+        protected void InvokeDropedOutsideEvent(T cellData)
+        {
+            DropedOutside?.Invoke(cellData);
         }
 
         protected virtual void OnCellClick(IVariableInventoryCell cell)

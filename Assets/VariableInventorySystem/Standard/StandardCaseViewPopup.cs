@@ -27,13 +27,14 @@ namespace VariableInventorySystem
             closeButton.SetCallback(() => onCloseButton());
 
             // wait for relayout
-            StartCoroutine(DelayFrame(() => sizeTarget.sizeDelta = sizeSampleTarget.rect.size + sizeTargetOffset));
+            StartCoroutine(Relayout());
         }
 
-        IEnumerator DelayFrame(Action action)
+        IEnumerator Relayout()
         {
             yield return null;
-            action?.Invoke();
+
+            sizeTarget.sizeDelta = sizeSampleTarget.rect.size + sizeTargetOffset;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace VariableInventorySystem
 {
     public class StandardStashView : MonoBehaviour, IVariableInventoryView
     {
-        [SerializeField] GameObject cellPrefab;
+        [SerializeField] StandardCell cellPrefab;
         [SerializeField] ScrollRect scrollRect;
         [SerializeField] GridLayoutGroup gridLayoutGroup;
         [SerializeField] Graphic condition;
@@ -24,21 +24,21 @@ namespace VariableInventorySystem
         [SerializeField] Color positiveColor;
         [SerializeField] Color negativeColor;
 
-        public StandardStashViewData StashData { get; private set; }
-
-        public int CellCount => StashData.CapacityWidth * StashData.CapacityHeight;
-
         protected IVariableInventoryCell[] itemViews;
         protected CellCorner cellCorner;
 
         int? originalId;
-        IVariableInventoryCellData originalCellData;
+        ICellData originalCellData;
         Vector3 conditionOffset;
 
         Action<IVariableInventoryCell> onCellClick;
         Action<IVariableInventoryCell> onCellOptionClick;
         Action<IVariableInventoryCell> onCellEnter;
         Action<IVariableInventoryCell> onCellExit;
+
+        public IVariableInventoryViewData ViewData => StashData;
+        public StandardStashViewData StashData { get; private set; }
+        public int CellCount => StashData.CapacityWidth * StashData.CapacityHeight;
 
         public void SetCellCallback(
             Action<IVariableInventoryCell> onCellClick,
@@ -50,6 +50,11 @@ namespace VariableInventorySystem
             this.onCellOptionClick = onCellOptionClick;
             this.onCellEnter = onCellEnter;
             this.onCellExit = onCellExit;
+        }
+
+        public int? GetEffectCellID()
+        {
+            return originalId;
         }
 
         public virtual void Apply(IVariableInventoryViewData data)
@@ -68,7 +73,7 @@ namespace VariableInventorySystem
 
                 for (var i = 0; i < CellCount; i++)
                 {
-                    var itemView = Instantiate(cellPrefab, gridLayoutGroup.transform).GetComponent<StandardCell>();
+                    var itemView = Instantiate(cellPrefab, gridLayoutGroup.transform);
                     itemViews[i] = itemView;
 
                     itemView.transform.SetAsFirstSibling();
@@ -120,7 +125,7 @@ namespace VariableInventorySystem
             conditionTransform.sizeDelta = new Vector2(stareCell.DefaultCellSize.x * width, stareCell.DefaultCellSize.y * height);
         }
 
-        public virtual IVariableInventoryCellData OnPick(IVariableInventoryCell stareCell, PointerEventData.InputButton button)
+        public virtual ICellData OnPick(IVariableInventoryCell stareCell, PointerEventData.InputButton button)
         {
             if (stareCell?.CellData == null)
             {
@@ -227,8 +232,6 @@ namespace VariableInventorySystem
         {
             if (stareCell == null)
             {
-                //TODO: Make dropping from inventory
-                //DropedOutside?.Invoke();
                 return null;
             }
 
@@ -249,7 +252,7 @@ namespace VariableInventorySystem
             {
                 if (stareCell.CellData != null)
                 {
-                    if (stareCell.CellData is IVariableInventoryCellData cellData && cellData.CanInsert(effectCell.CellData, new Quantity(1)))
+                    if (stareCell.CellData is ICellData cellData && cellData.CanInsert(effectCell.CellData, new Quantity(1)))
                     {
                         StashData.InsertInventoryItem(index.Value, effectCell.CellData);
                         itemViews[index.Value].Apply(StashData.CellData[index.Value]);
@@ -366,7 +369,7 @@ namespace VariableInventorySystem
             return index;
         }
 
-        protected virtual int? GetIndex(IVariableInventoryCell stareCell, IVariableInventoryCellData effectCellData, CellCorner cellCorner)
+        protected virtual int? GetIndex(IVariableInventoryCell stareCell, ICellData effectCellData, CellCorner cellCorner)
         {
             var index = GetIndex(stareCell);
 
@@ -404,7 +407,7 @@ namespace VariableInventorySystem
             return index;
         }
 
-        protected virtual (int, int) GetRotateSize(IVariableInventoryCellData cell)
+        protected virtual (int, int) GetRotateSize(ICellData cell)
         {
             if (cell == null)
             {

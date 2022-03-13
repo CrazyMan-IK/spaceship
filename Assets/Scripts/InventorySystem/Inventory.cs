@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,16 +6,17 @@ using AYellowpaper;
 using VariableInventorySystem;
 using Astetrio.Spaceship.Interfaces;
 using Astetrio.Spaceship.Items;
-using Astetrio.Spaceship.Models;
 
 namespace Astetrio.Spaceship.InventorySystem
 {
     public class Inventory : MonoBehaviour
     {
         [SerializeField] private InterfaceReference<IInputPresenter> _input;
+        [SerializeField] private List<InterfaceReference<IRecipe>> _recipes;
         [SerializeField] private Canvas _canvas;
         [SerializeField] private StandardInventoryCore _standardCore;
         [SerializeField] private StandardStashView _standardStashView;
+        [SerializeField] private QuickAccessToolbar _quickAccess;
 
         [Space]
 
@@ -32,11 +34,13 @@ namespace Astetrio.Spaceship.InventorySystem
 
         private void Awake()
         {
-            _standardCore.Initialize();
+            _standardCore.Initialize(_recipes.Select(x => x.Value).ToList());
             _standardCore.AddInventoryView(_standardStashView);
+            _standardCore.AddInventoryView(_quickAccess);
 
             _viewData = new StandardStashViewData(6, 6);
             _standardStashView.Apply(_viewData);
+            _quickAccess.Apply(_quickAccess.ViewData);
 
             StartCoroutine(InsertCoroutine());
         }
@@ -59,7 +63,7 @@ namespace Astetrio.Spaceship.InventorySystem
         private void OnDropedOutside(CustomItemCellData information)
         {
             var item = Instantiate(_itemPrefab, Camera.main.transform.position + Camera.main.transform.forward, Quaternion.identity, _itemsRoot);
-            item.Initialize(information.Item, information.Count);
+            item.Initialize(information.Information, information.Count);
         }
 
         private void Update()
@@ -87,7 +91,7 @@ namespace Astetrio.Spaceship.InventorySystem
 
         public bool TryAdd(Item item)
         {
-            var itemCell = new CustomItemCellData(item.Information, item.Count);
+            var itemCell = item.Information.AsCellData(item.Count);
             var id = _viewData.GetInsertableId(itemCell);
 
             if (!id.HasValue)

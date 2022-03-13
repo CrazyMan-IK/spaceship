@@ -12,11 +12,11 @@ namespace VariableInventorySystem
         {
         }
 
-        public StandardCaseViewData(IVariableInventoryCellData[] cellData, int capacityWidth, int capacityHeight) : base(cellData, capacityWidth, capacityHeight)
+        public StandardCaseViewData(ICellData[] cellData, int capacityWidth, int capacityHeight) : base(cellData, capacityWidth, capacityHeight)
         {
         }
 
-        public override int? GetInsertableId(IVariableInventoryCellData cellData)
+        public override int? GetInsertableId(ICellData cellData)
         {
             if (cellData is IStandardCaseCellData)
             {
@@ -45,7 +45,7 @@ namespace VariableInventorySystem
             return null;*/
         }
 
-        public override bool CheckInsert(int id, IVariableInventoryCellData cellData, bool autoRotate = true)
+        public override bool CheckInsert(int id, ICellData cellData, bool autoRotate = true)
         {
             if (cellData is IStandardCaseCellData)
             {

@@ -57,7 +57,7 @@ Shader "Unlit/Nebula"
             {
                 float2 uv = i.screenPos.xy / i.screenPos.w;
                 fixed4 col1 = tex2D(_MainTex, i.uv) * _Color;
-                fixed4 col2 = tex2D(_CameraOpaqueTexture, uv);
+                fixed4 col2 = tex2D(_CameraOpaqueTexture, float2(uv.x, 1 - uv.y));
                 col1.rgb *= col1.a;
                 fixed3 res = 1 - (1 - col1.rgb) * (1 - col2.rgb);
                 //return fixed4(1, 1, 1, 0) - res;// fixed4(1, 1, 1, 1) - ñol;

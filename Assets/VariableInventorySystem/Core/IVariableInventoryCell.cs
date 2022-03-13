@@ -5,11 +5,11 @@ namespace VariableInventorySystem
     public interface IVariableInventoryCell
     {
         RectTransform RectTransform { get; }
-        IVariableInventoryCellData CellData { get; }
+        ICellData CellData { get; }
         Vector2 DefaultCellSize { get; }
         Vector2 MargineSpace { get; }
 
-        void Apply(IVariableInventoryCellData data);
+        void Apply(ICellData data);
 
         Vector2 GetLocalPosition(Vector2 position, Camera camera);
 

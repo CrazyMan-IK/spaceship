@@ -9,6 +9,7 @@ namespace Astetrio.Spaceship
     {
         [SerializeField] private Gradient _gradient = null;
         [SerializeField] private float _colorIntensity = 10;
+        [SerializeField] private Light _light = null;
 
         private MeshRenderer _renderer = null;
         private readonly List<MeshRenderer> _renderers = new List<MeshRenderer>();
@@ -25,10 +26,11 @@ namespace Astetrio.Spaceship
         private void OnEnable()
         {
             //var newColor = Random.ColorHSV(0, 1, 0.8f, 0.8f, 1, 1) * Mathf.Pow(2, _colorIntensity);
-            var newColor = _gradient.Evaluate(Random.value) * Mathf.Pow(2, _colorIntensity);
+            var newColor = _gradient.Evaluate(Random.value);
+            _light.color = newColor;
 
             var material = _renderer.material;
-            material.color = newColor;
+            material.color = newColor * Mathf.Pow(2, _colorIntensity);
 
             foreach (var renderer in _renderers)
             {
