@@ -17,6 +17,7 @@ namespace Astetrio.Spaceship
         private readonly List<Star> _stars = new List<Star>();
 
         public IReadOnlyList<Star> Stars => _stars;
+        public bool IsGenerating { get; private set; }
 
         private void Awake()
         {
@@ -84,6 +85,8 @@ namespace Astetrio.Spaceship
 
         private IEnumerator GenerateMultiple(Vector3Int position, int additionalSeed)
         {
+            IsGenerating = true;
+
             var oldStars = _stars.ToList();
             foreach (var star in oldStars)
             {
@@ -113,6 +116,8 @@ namespace Astetrio.Spaceship
             {
                 star.enabled = true;
             }
+
+            IsGenerating = false;
         }
 
         private IEnumerator Generate(Vector3 offset, Vector3Int position, int additionalSeed)
@@ -128,7 +133,8 @@ namespace Astetrio.Spaceship
             {
                 var direction = URandom.insideUnitSphere;
                 //var targetPosition = direction.normalized * 49152 + direction * 73728; //GOOD
-                var targetPosition = offset + direction.normalized * 65536 + direction * 65536; //GOOD
+                //var targetPosition = offset + direction.normalized * 65536 + direction * 65536; //GOOD
+                var targetPosition = offset + direction * 131072; //GOOD
                 //var targetPosition = direction * 24576;
                 //var targetPosition = direction.normalized * 9216 + direction * 9216;
 
@@ -151,6 +157,7 @@ namespace Astetrio.Spaceship
                 // 65536
                 // 81920
                 // 98304
+                // 131072
 
                 if (Physics.CheckSphere(targetPosition, 32768, _starsLayerMask, QueryTriggerInteraction.Collide))
                 {

@@ -197,7 +197,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 8.192
+  m_Radius: 12.288
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4136337794000285572
 MonoBehaviour:
@@ -259,7 +259,7 @@ MonoBehaviour:
   _spawnCollision: {fileID: 7637242886886367199}
   _light: {fileID: 8471330396417579726}
   _target: {fileID: 0}
-  _triggerSize: 32768
+  _triggerSize: 49152
   _maxDistance: 57344
 --- !u!205 &4470788809883322115
 LODGroup:

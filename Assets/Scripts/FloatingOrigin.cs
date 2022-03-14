@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using AYellowpaper;
+using Astetrio.Spaceship.Interfaces;
 
 namespace Astetrio.Spaceship
 {
@@ -148,7 +151,9 @@ namespace Astetrio.Spaceship
             _128 = 128,
             _256 = 256,
             _512 = 512,
-            _1024 = 1024
+            _1024 = 1024,
+            _2048 = 2048,
+            _4096 = 4096
         }
 
         public static FloatingOrigin Instance { get; private set; }
@@ -157,7 +162,9 @@ namespace Astetrio.Spaceship
         // coordinate is moved by the same amount towards 0 (which updates offset).
         // Pick a power of two for this, as floating point precision (the thing
         // we are trying to regulate) decreases with every successive power of two.
-        public const float ThresholdValue = (float)Threshold._1024;
+        [SerializeField] private List<Star> _baseStars = new List<Star>();
+        [SerializeField] private InterfaceReference<IStarsGenerator> _starsGenerator = null;
+        public const float ThresholdValue = (float)Threshold._4096;
 
         public event Action Shifted = null;
 
@@ -283,8 +290,12 @@ namespace Astetrio.Spaceship
                     sys.Play();
             }
 
-            Star[] stars = FindObjectsOfType<Star>();
-            foreach (var star in stars)
+            foreach (var star in _baseStars)
+            {
+                star.AddBaseOffset(offsetToApply);
+            }
+
+            foreach (var star in _starsGenerator.Value.Stars)
             {
                 star.AddBaseOffset(offsetToApply);
             }
