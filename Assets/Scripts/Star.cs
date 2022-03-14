@@ -9,6 +9,7 @@ using URandom = UnityEngine.Random;
 namespace Astetrio.Spaceship
 {
     [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(SunColor))]
     public class Star : MonoBehaviour
     {
         [SerializeField] private SphereCollider _spawnCollision = null;
@@ -18,15 +19,42 @@ namespace Astetrio.Spaceship
         [SerializeField] private float _maxDistance = 16384;
 
         private readonly List<MeshRenderer> _renderers = new List<MeshRenderer>();
+        private MeshRenderer _renderer = null;
+        private SunColor _sunColor = null;
+        private bool _isActive = true;
 
         private DVector3 _basePosition = DVector3.Zero;
         private Vector3 _baseScale = Vector3.zero;
 
-        public bool IsActive { get; private set; }
+        public MeshRenderer Renderer => _renderer;
+        public Color Color => _sunColor.Color;
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+
+                    if (_isActive)
+                    {
+                        EnableRenderers();
+                    }
+                    else
+                    {
+                        DisableRenderers();
+                    }
+                }
+            }
+        }
+        public bool IsRealSize { get; private set; }
 
         private void Awake()
         {
             GetComponentsInChildren(_renderers);
+            _renderer = GetComponent<MeshRenderer>();
+            _sunColor = GetComponent<SunColor>();
 
             _basePosition = transform.position;
             _baseScale = transform.localScale;
@@ -80,33 +108,37 @@ namespace Astetrio.Spaceship
                 easing = Easing.ExpoOutIn;
             }*/
 
-            var baseDistance = DVector3.Distance(_basePosition, _target.position);
+            var direction = _target.position - _basePosition;
+            var baseDistance = direction.Magnitude;
 
             if (baseDistance > _maxDistance)
             {
+                IsRealSize = false;
+
                 _light.gameObject.SetActive(false);
 
                 var multiplier = _maxDistance / baseDistance;
                 if (multiplier <= 0.26f)
                 {
                     IsActive = false;
-                    DisableRenderers();
+                    //DisableRenderers();
 
                     return;
                 }
 
                 IsActive = true;
-                EnableRenderers();
+                //EnableRenderers();
 
-                var direction = _target.position - _basePosition;
-                direction.Normalize();
+                direction /= baseDistance;
 
                 transform.position = (Vector3)(_basePosition + direction * (baseDistance - _maxDistance));
                 //transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(easing(multiplier), 0), 1), 0) * multiplier) * _baseScale;
-                transform.localScale = (float)(Math.Max(-0.69 + (1 + 0.69) * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
+                transform.localScale = (float)(Math.Max(-0.69 + 1.69 * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
             }
             else
             {
+                IsRealSize = true;
+
                 transform.position = (Vector3)_basePosition;
                 transform.localScale = _baseScale;
 

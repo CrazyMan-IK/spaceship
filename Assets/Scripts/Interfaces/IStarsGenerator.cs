@@ -7,6 +7,8 @@ namespace Astetrio.Spaceship.Interfaces
 {
     public interface IStarsGenerator
     {
+        IReadOnlyList<Star> Stars { get; }
+
         void StartGeneration(Vector3Int position, int additionalSeed);
     }
 }

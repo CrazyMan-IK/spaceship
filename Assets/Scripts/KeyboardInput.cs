@@ -15,6 +15,11 @@ namespace Astetrio.Spaceship
         private const string _MouseXAxisName = "Mouse X";
         private const string _MouseYAxisName = "Mouse Y";
 
+        /*public event Action ToggleInventoryUI = null;
+        public event Action RotateInventoryItem = null;
+        public event Action PickupItem = null;
+        public event Action ToggleMainUI = null;*/
+
         [SerializeField] private Vector2 _mouseSensitivity = Vector2.one;
 
         private readonly IReadOnlyCollection<KeyCode> _keyCodes = new HashSet<KeyCode>(Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>());

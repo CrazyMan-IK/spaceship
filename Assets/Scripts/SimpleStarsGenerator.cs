@@ -16,6 +16,8 @@ namespace Astetrio.Spaceship
 
         private readonly List<Star> _stars = new List<Star>();
 
+        public IReadOnlyList<Star> Stars => _stars;
+
         private void Awake()
         {
             _starPrefab.enabled = false;

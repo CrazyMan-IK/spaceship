@@ -23,20 +23,24 @@ namespace AYellowpaper
 		{
 			get
 			{
-				if (_underlyingValue == null)
-					return null;
-				var @interface = _underlyingValue as TInterface;
-				Debug.Assert(@interface != null, $"{_underlyingValue} needs to implement interface {nameof(TInterface)}.");
-				return @interface;
+				if (_underlyingValue is TInterface interfaceValue)
+				{
+					return interfaceValue;
+				}
+
+				return null;
+				//Debug.Log($"{_underlyingValue} needs to implement interface {nameof(TInterface)}.");
 			}
 			set
 			{
 				if (value == null)
+                {
 					_underlyingValue = null;
+                }
 				else
 				{
 					var newValue = value as UObject;
-					UnityEngine.Debug.Assert(newValue != null, $"{value} needs to be of type {typeof(UObject)}.");
+					Debug.Assert(newValue != null, $"{value} needs to be of type {typeof(UObject)}.");
 					_underlyingValue = newValue;
 				}
 			}

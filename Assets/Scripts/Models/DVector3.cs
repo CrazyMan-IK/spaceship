@@ -67,6 +67,11 @@ namespace Astetrio.Spaceship
             return new DVector3(a.X * b, a.Y * b, a.Z * b);
         }
 
+        public static DVector3 operator/(DVector3 a, double b)
+        {
+            return new DVector3(a.X / b, a.Y / b, a.Z / b);
+        }
+
         public static explicit operator Vector3(DVector3 a)
         {
             return new Vector3((float)a.X, (float)a.Y, (float)a.Z);

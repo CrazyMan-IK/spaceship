@@ -242,6 +242,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   _colorIntensity: 7
   _light: {fileID: 8471330396417579726}
+  _defaultColor: {r: 0.75, g: 0.61875, b: 0.4875, a: 1}
+  _isRandom: 1
 --- !u!114 &5500343405439314368
 MonoBehaviour:
   m_ObjectHideFlags: 0

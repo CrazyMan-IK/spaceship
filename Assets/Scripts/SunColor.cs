@@ -5,14 +5,18 @@ using UnityEngine;
 namespace Astetrio.Spaceship
 {
     [RequireComponent(typeof(MeshRenderer))]
-    public class RandomSunColor : MonoBehaviour
+    public class SunColor : MonoBehaviour
     {
         [SerializeField] private Gradient _gradient = null;
         [SerializeField] private float _colorIntensity = 10;
         [SerializeField] private Light _light = null;
+        [SerializeField] private Color _defaultColor = Color.white;
+        [SerializeField] private bool _isRandom = true;
 
         private MeshRenderer _renderer = null;
         private readonly List<MeshRenderer> _renderers = new List<MeshRenderer>();
+
+        public Color Color { get; private set; }
 
         private void Awake()
         {
@@ -26,7 +30,12 @@ namespace Astetrio.Spaceship
         private void OnEnable()
         {
             //var newColor = Random.ColorHSV(0, 1, 0.8f, 0.8f, 1, 1) * Mathf.Pow(2, _colorIntensity);
-            var newColor = _gradient.Evaluate(Random.value);
+            var newColor = _defaultColor;
+            if (_isRandom)
+            {
+                newColor = _gradient.Evaluate(Random.value);
+            }
+            Color = newColor;
             _light.color = newColor;
 
             var material = _renderer.material;
