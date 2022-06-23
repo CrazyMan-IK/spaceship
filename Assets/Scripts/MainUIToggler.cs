@@ -12,12 +12,27 @@ namespace Astetrio.Spaceship
         [SerializeField] private InterfaceReference<IInputPresenter> _input = null;
         [SerializeField] private Canvas _ui = null;
 
-        private void Update()
+        private void OnEnable()
+        {
+            _input.Value.ToggleMainUI += OnToggleUI;
+        }
+
+        private void OnDisable()
+        {
+            _input.Value.ToggleMainUI -= OnToggleUI;
+        }
+
+        /*private void Update()
         {
             if (_input.Value.KeysPressedInCurrentFrame[KeyCode.F1])
             {
                 _ui.gameObject.SetActive(!_ui.gameObject.activeSelf);
             }
+        }*/
+
+        private void OnToggleUI()
+        {
+            _ui.gameObject.SetActive(!_ui.gameObject.activeSelf);
         }
     }
 }

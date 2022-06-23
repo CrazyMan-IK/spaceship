@@ -57,6 +57,19 @@ namespace VariableInventorySystem
             return originalId;
         }
 
+        public int? GetCellID(IVariableInventoryCell cell)
+        {
+            for (int i = 0; i < itemViews.Length; i++)
+            {
+                if (itemViews[i] == cell)
+                {
+                    return i;
+                }
+            }
+
+            return null;
+        }
+
         public virtual void Apply(IVariableInventoryViewData data)
         {
             StashData = ((StandardStashViewData)data);

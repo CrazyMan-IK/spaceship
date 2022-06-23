@@ -135,9 +135,33 @@ namespace Astetrio.Spaceship.InventorySystem
 
         protected override void OnCellOptionClick(IVariableInventoryCell cell)
         {
+            IVariableInventoryView baseView = null;
+            var stareCellID = -1;
+            foreach (var view in InventoryViews)
+            {
+                stareCellID = view.GetCellID(stareCell) ?? -1;
+                if (stareCellID >= 0)
+                {
+                    baseView = view;
+                    break;
+                }
+            }
+
             OpenOptionsPopup(stareCell, effectCell?.CellData, new()
             {
-                { (stareCellData, effectCellData) => Debug.Log("Drop"), "Drop" }
+                { (stareCellData, effectCellData) =>
+                {
+                    if (stareCellData is CustomItemCellData cellData)
+                    {
+                        //stareCell.Apply(null);
+                        baseView.ViewData.InsertInventoryItem(stareCellID, null);
+
+                        baseView.ViewData.Apply();
+                        baseView.Apply(baseView.ViewData);
+
+                        InvokeDropedOutsideEvent(cellData);
+                    }
+                }, "Drop" }
             });
         }
 

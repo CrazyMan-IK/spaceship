@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Ice
   m_EditorClassIdentifier: 
   _internalId: ec0f031a-7675-4fe0-a562-1c56783d60fe
-  _name: Ice
-  _cellSize: {x: 2, y: 1}
-  _stackSize: 9
-  _icon: {fileID: 21300000, guid: 4d12cf2d63909da43b11b6170b5b978c, type: 3}
-  _mesh: {fileID: 4300000, guid: 19497d68b37d2594fb3e269601d333be, type: 3}
-  _materials:
+  <Name>k__BackingField: Ice
+  <CellSize>k__BackingField: {x: 2, y: 1}
+  <StackSize>k__BackingField: 9
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4d12cf2d63909da43b11b6170b5b978c, type: 3}
+  <Mesh>k__BackingField: {fileID: 4300000, guid: 19497d68b37d2594fb3e269601d333be, type: 3}
+  <Materials>k__BackingField:
   - {fileID: 2100000, guid: a174814b4c1b2d042b8380d11932d1c0, type: 2}

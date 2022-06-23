@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CopperOre
   m_EditorClassIdentifier: 
   _internalId: 2a2a6ab2-d236-405c-bd20-b7512b00e9ce
-  _name: Copper Ore
-  _cellSize: {x: 2, y: 2}
-  _stackSize: 3
-  _icon: {fileID: 21300000, guid: 4302b735defed6e4d9f589c305ce8d4b, type: 3}
-  _mesh: {fileID: 4300000, guid: 19497d68b37d2594fb3e269601d333be, type: 3}
-  _materials:
+  <Name>k__BackingField: Copper Ore
+  <CellSize>k__BackingField: {x: 2, y: 2}
+  <StackSize>k__BackingField: 3
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4302b735defed6e4d9f589c305ce8d4b, type: 3}
+  <Mesh>k__BackingField: {fileID: 4300000, guid: 19497d68b37d2594fb3e269601d333be, type: 3}
+  <Materials>k__BackingField:
   - {fileID: 2100000, guid: aeea0b0ce40f57741addd46857bdbc00, type: 2}

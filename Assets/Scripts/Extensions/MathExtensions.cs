@@ -10,5 +10,10 @@ namespace Astetrio.Spaceship.Extensions
         {
             return toMin + (value - fromMin) * (toMax - toMin) / (fromMax - fromMin);
         }
+
+        public static double Remap(this double value, double fromMin, double fromMax, double toMin, double toMax)
+        {
+            return toMin + (value - fromMin) * (toMax - toMin) / (fromMax - fromMin);
+        }
     }
 }

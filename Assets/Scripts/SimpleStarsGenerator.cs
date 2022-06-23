@@ -23,7 +23,7 @@ namespace Astetrio.Spaceship
         {
             _starPrefab.enabled = false;
 
-            StartGeneration(Vector3Int.zero, 15);
+            StartGeneration(Vector3Int.zero, 16);
         }
 
         private void OnEnable()

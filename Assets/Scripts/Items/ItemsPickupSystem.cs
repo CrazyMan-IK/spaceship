@@ -18,10 +18,21 @@ namespace Astetrio.Spaceship.Items
         [SerializeField] private float _pickupRange = 3;
 
         private Camera _camera = null;
+        private Item _currentItem = null;
 
         private void Awake()
         {
             _camera = Camera.main;
+        }
+
+        private void OnEnable()
+        {
+            _input.Value.PickupItem += OnItemPickup;
+        }
+
+        private void OnDisable()
+        {
+            _input.Value.PickupItem += OnItemPickup;
         }
 
         private void Update()
@@ -32,18 +43,31 @@ namespace Astetrio.Spaceship.Items
 
             if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out var hit, _pickupRange))
             {
-                if (hit.collider.TryGetComponent(out Item item))
+                if (hit.collider.TryGetComponent(out _currentItem))
                 {
-                    _itemNameText.text = item.Information.Name;
+                    _itemNameText.text = _currentItem.Information.Name;
 
-                    if (_input.Value.KeysPressedInCurrentFrame[KeyCode.E] && _inventory.TryAdd(item))
+                    /*if (_input.Value.KeysPressedInCurrentFrame[KeyCode.E] && _inventory.TryAdd(_currentItem))
                     {
-                        Destroy(item.gameObject);
+                        Destroy(_currentItem.gameObject);
                         return;
-                    }
+                    }*/
 
-                    layer.Add(item.gameObject);
+                    layer.Add(_currentItem.gameObject);
                 }
+            }
+        }
+
+        private void OnItemPickup()
+        {
+            if (_currentItem == null)
+            {
+                return;
+            }
+
+            if (_inventory.TryAdd(_currentItem))
+            {
+                Destroy(_currentItem.gameObject);
             }
         }
     }

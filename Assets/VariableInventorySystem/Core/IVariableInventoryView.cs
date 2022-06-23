@@ -14,6 +14,7 @@ namespace VariableInventorySystem
             Action<IVariableInventoryCell> onCellExit);
 
         int? GetEffectCellID();
+        int? GetCellID(IVariableInventoryCell cell);
 
         void Apply(IVariableInventoryViewData data);
         void ReApply();

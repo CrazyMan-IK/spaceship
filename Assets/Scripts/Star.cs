@@ -1,3 +1,4 @@
+using Astetrio.Spaceship.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Astetrio.Spaceship
 
         public MeshRenderer Renderer => _renderer;
         public Color Color => _sunColor.Color;
+        public float MaxDistance => _maxDistance;
         public bool IsActive
         {
             get => _isActive;
@@ -49,6 +51,7 @@ namespace Astetrio.Spaceship
             }
         }
         public bool IsRealSize { get; private set; }
+        public double Distance { get; private set; }
 
         private void Awake()
         {
@@ -109,15 +112,18 @@ namespace Astetrio.Spaceship
             }*/
 
             var direction = _target.position - _basePosition;
-            var baseDistance = direction.Magnitude;
+            Distance = direction.Magnitude;
 
-            if (baseDistance > _maxDistance)
+            if (Distance > _maxDistance)
             {
                 IsRealSize = false;
 
                 _light.gameObject.SetActive(false);
 
-                var multiplier = _maxDistance / baseDistance;
+                //_light.intensity = Convert.ToSingle(Math.Clamp(Distance.Remap(0, MaxDistance, 5.65, 0.0), 0, 1));
+                //_light.color = _sunColor.Color * _light.intensity * 0.5f;
+
+                var multiplier = _maxDistance / Distance;
                 if (multiplier <= 0.26f)
                 {
                     IsActive = false;
@@ -129,9 +135,9 @@ namespace Astetrio.Spaceship
                 IsActive = true;
                 //EnableRenderers();
 
-                direction /= baseDistance;
+                direction /= Distance;
 
-                transform.position = (Vector3)(_basePosition + direction * (baseDistance - _maxDistance));
+                transform.position = (Vector3)(_basePosition + direction * (Distance - _maxDistance));
                 //transform.localScale = (float)(Math.Max(-0.6 + (1 + 0.6) * Math.Min(Math.Max(easing(multiplier), 0), 1), 0) * multiplier) * _baseScale;
                 transform.localScale = (float)(Math.Max(-0.69 + 1.69 * Easing.ExpoOutInOptimized(multiplier), 0) * multiplier) * _baseScale;
             }
@@ -142,6 +148,9 @@ namespace Astetrio.Spaceship
                 transform.position = (Vector3)_basePosition;
                 transform.localScale = _baseScale;
 
+                //_light.intensity = Convert.ToSingle(Math.Clamp(Distance.Remap(0, MaxDistance, 5.65, 0.0), 0, 1));
+                _light.intensity = Convert.ToSingle(Math.Clamp(Distance.Remap(0, MaxDistance, 1.7, 0.0), 0, 1));
+                _light.color = _sunColor.Color * _light.intensity * 0.5f;
                 _light.gameObject.SetActive(true);
             }
 

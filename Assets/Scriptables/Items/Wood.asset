@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   _internalId: f3ae1cca-64c4-476a-93a6-331386051a81
-  _name: Wood
-  _cellSize: {x: 3, y: 1}
-  _stackSize: 9
-  _icon: {fileID: 21300000, guid: c7c66aed89c18004ca1225c719b5c54a, type: 3}
-  _mesh: {fileID: -293502825896984990, guid: 7247f4be51a3afa4696d306665749afb, type: 3}
-  _materials:
+  <Name>k__BackingField: Wood
+  <CellSize>k__BackingField: {x: 3, y: 1}
+  <StackSize>k__BackingField: 9
+  <Icon>k__BackingField: {fileID: 21300000, guid: c7c66aed89c18004ca1225c719b5c54a, type: 3}
+  <Mesh>k__BackingField: {fileID: -293502825896984990, guid: 7247f4be51a3afa4696d306665749afb, type: 3}
+  <Materials>k__BackingField:
   - {fileID: 2100000, guid: b53d869bb6284a74491a3aa3324e2d38, type: 2}

@@ -114,6 +114,13 @@ namespace Astetrio.Spaceship.InventorySystem
             return 0;
         }
 
+        public int? GetCellID(IVariableInventoryCell cell)
+        {
+            Debug.Log("Qat: GetEffectCellID");
+
+            return 0;
+        }
+
         public void OnCellEnter(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
         {
             Debug.Log("Qat: OnCellEnter");

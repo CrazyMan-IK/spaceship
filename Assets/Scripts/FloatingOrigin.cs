@@ -242,13 +242,16 @@ namespace Astetrio.Spaceship
 
             // Offset scene root objects
 
-            GameObject[] objects = SceneManager
-                .GetActiveScene().GetRootGameObjects();
+            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
 
             foreach (var o in objects)
             {
-                Transform t = o.GetComponent<Transform>();
-                t.position += offsetToApply;
+                if (o.TryGetComponent(out FloatingOriginTarget _))
+                {
+                    o.transform.position += offsetToApply;
+
+                    continue;
+                }
             }
 
             // Offset world-space particles

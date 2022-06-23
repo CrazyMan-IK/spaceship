@@ -5,6 +5,7 @@ using UnityEngine;
 using AYellowpaper;
 using Astetrio.Spaceship.Interfaces;
 using System.Linq;
+using Astetrio.Spaceship.Extensions;
 
 namespace Astetrio.Spaceship
 {
@@ -12,6 +13,8 @@ namespace Astetrio.Spaceship
     {
         private const string _Tint = "_Tint";
 
+        //[SerializeField] private float _changingSpeedMultiplier = 5;
+        [SerializeField] private double _remapToMax = 1.5;
         [SerializeField] private Material _material = null;
         [SerializeField] private List<Star> _stars = null;
         [SerializeField] private InterfaceReference<IStarsGenerator> _generator = null;
@@ -25,7 +28,7 @@ namespace Astetrio.Spaceship
             {
                 if (star.IsRealSize)
                 {
-                    color += star.Color;
+                    color += star.Color * Convert.ToSingle(Math.Clamp(star.Distance.Remap(0, star.MaxDistance, _remapToMax, 0.0), 0, 1));
                     n++;
                 }
             }
@@ -36,22 +39,28 @@ namespace Astetrio.Spaceship
             }
 
             color /= n;
-            Color.RGBToHSV(color, out var h, out _, out _);
+            Color.RGBToHSV(color, out var h, out var s, out var v);
 
-            //s -= 0.05f; //30
-            color = Color.HSVToRGB(h, 0.30f, 0.35f);
+            s += 0.34f; //30 //+24 //+4
+            v += 0.20f;
 
+            color = Color.HSVToRGB(h, s, Mathf.Max(v, 0.35f)); //h 30 35
             _material.SetColor(_Tint, color);
+            //_material.SetColor(_Tint, Color.Lerp(_material.GetColor(_Tint), color, Time.deltaTime * _changingSpeedMultiplier));
 
-            //s += 0.34f; //64
-            
-            color = Color.HSVToRGB(h, 0.64f, 0.54f);
+            s += 0.34f; //64
+            v += 0.19f;
+
+            color = Color.HSVToRGB(h, s, Mathf.Max(v, 0.54f)); //h 64 54
             RenderSettings.fogColor = color;
+            //RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, color, Time.deltaTime * _changingSpeedMultiplier);
 
-            //s += 0.11f; //75
+            s += 0.11f; //75
+            v -= 0.19f;
 
-            color = Color.HSVToRGB(h, 0.75f, 0.35f);
+            color = Color.HSVToRGB(h, s, Mathf.Max(v, 0.35f)); //h 75 35
             RenderSettings.ambientSkyColor = color;
+            //RenderSettings.ambientSkyColor = Color.Lerp(RenderSettings.ambientSkyColor, color, Time.deltaTime * _changingSpeedMultiplier);
         }
     }
 }

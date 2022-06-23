@@ -11,6 +11,8 @@ namespace Astetrio.Spaceship
     {
         [SerializeField] private InterfaceReference<IInputPresenter> _input = null;
         [SerializeField] private Camera _camera = null;
+        [SerializeField] private Transform _verticalAxisPivot = null;
+        [SerializeField] private Transform _horizontalAxisPivot = null;
         [SerializeField] private float _acceleration = 10;
 
         private Rigidbody _rigidbody = null;
@@ -21,8 +23,8 @@ namespace Astetrio.Spaceship
         {
             _rigidbody = GetComponent<Rigidbody>();
 
-            _currentCameraRotation.y = _camera.transform.localEulerAngles.x;
-            _currentCameraRotation.x = _camera.transform.localEulerAngles.y;
+            _currentCameraRotation.y = _horizontalAxisPivot.localEulerAngles.x;
+            _currentCameraRotation.x = _verticalAxisPivot.localEulerAngles.y;
         }
 
         /*private void Update()
@@ -33,14 +35,14 @@ namespace Astetrio.Spaceship
 
         private void FixedUpdate()
         {
-            var direction = _input.Value.Direction * _acceleration * Time.deltaTime;
+            var direction = _acceleration * Time.deltaTime * _input.Value.Direction;
             //var rotation = _input.Value.Rotation * Time.deltaTime;
 
             var velocity = _camera.transform.rotation * direction;
 
             _rigidbody.AddForce(velocity, ForceMode.Acceleration);
 
-            if (_input.Value.Keys.TryGetValue(KeyCode.Q, out var isPressed) && isPressed)
+            if (_input.Value.SlowDownPressed)
             {
                 _rigidbody.AddForce(-_rigidbody.velocity * 2, ForceMode.Acceleration);
             }
@@ -56,7 +58,8 @@ namespace Astetrio.Spaceship
             _currentCameraRotation.x += rotation.x;
             _currentCameraRotation.y = Mathf.Clamp(_currentCameraRotation.y - rotation.y, -90, 90);
 
-            _camera.transform.localEulerAngles = new Vector3(_currentCameraRotation.y, _currentCameraRotation.x, 0);
+            _horizontalAxisPivot.localEulerAngles = new Vector3(_currentCameraRotation.y, 0, 0);
+            _verticalAxisPivot.localEulerAngles = new Vector3(0, _currentCameraRotation.x, 0);
 
             //Debug.Log(Time.deltaTime);
         }

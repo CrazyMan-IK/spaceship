@@ -41,23 +41,29 @@ namespace Astetrio.Spaceship.InventorySystem
             _viewData = new StandardStashViewData(6, 6);
             _standardStashView.Apply(_viewData);
             _quickAccess.Apply(_quickAccess.ViewData);
-
-            StartCoroutine(InsertCoroutine());
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             _canvas.enabled = _enabled;
+
+            yield return null;
+
+            _sizeTarget.sizeDelta = _sizeSampleTarget.rect.size + _sizeTargetOffset;
         }
 
         private void OnEnable()
         {
             _standardCore.DropedOutside += OnDropedOutside;
+            _input.Value.ToggleInventoryUI += OnToggleUI;
+            _input.Value.RotateInventoryItem += OnRotateItem;
         }
 
         private void OnDisable()
         {
             _standardCore.DropedOutside -= OnDropedOutside;
+            _input.Value.ToggleInventoryUI -= OnToggleUI;
+            _input.Value.RotateInventoryItem -= OnRotateItem;
         }
 
         private void OnDropedOutside(CustomItemCellData information)
@@ -66,7 +72,7 @@ namespace Astetrio.Spaceship.InventorySystem
             item.Initialize(information.Information, information.Count);
         }
 
-        private void Update()
+        /*private void Update()
         {
             if (_input.Value.KeysPressedInCurrentFrame[KeyCode.Tab])
             {
@@ -87,7 +93,7 @@ namespace Astetrio.Spaceship.InventorySystem
             {
                 _standardCore.SwitchRotate();
             }
-        }
+        }*/
 
         public bool TryAdd(Item item)
         {
@@ -106,43 +112,24 @@ namespace Astetrio.Spaceship.InventorySystem
             return true;
         }
 
-        private IEnumerator InsertCoroutine()
+        private void OnToggleUI()
         {
-            /*var caseItem = new CaseCellData(0);
-            stashData.InsertInventoryItem(stashData.GetInsertableId(caseItem).Value, caseItem);
-            //_standardStashView.Apply(stashData);
+            _enabled = !_enabled;
 
-            yield return null;
-
-            caseItem = new CaseCellData(0);
-            stashData.InsertInventoryItem(stashData.GetInsertableId(caseItem).Value, caseItem);
-            //_standardStashView.Apply(stashData);
-
-            yield return null;
-
-            for (var i = 0; i < 20; i++)
+            _canvas.enabled = _enabled;
+            if (_enabled)
             {
-                var item = new ItemCellData(Random.Range(0, 5));
-                var id = stashData.GetInsertableId(item);
-
-                if (!id.HasValue)
-                {
-                    break;
-                }
-
-                stashData.InsertInventoryItem(id.Value, item);
-                //_standardStashView.Apply(stashData);
-
-                yield return null;
+                _input.Value.Disable();
             }
+            else
+            {
+                _input.Value.Enable();
+            }
+        }
 
-            _standardStashView.Apply(stashData);*/
-
-            //UnityEditor.EditorApplication.isPaused = true;
-
-            yield return null;
-            yield return null;
-            _sizeTarget.sizeDelta = _sizeSampleTarget.rect.size + _sizeTargetOffset;
+        private void OnRotateItem()
+        {
+            _standardCore.SwitchRotate();
         }
     }
 }

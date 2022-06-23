@@ -15,36 +15,37 @@ namespace Astetrio.Spaceship
         private const string _MouseXAxisName = "Mouse X";
         private const string _MouseYAxisName = "Mouse Y";
 
-        /*public event Action ToggleInventoryUI = null;
+        public event Action ToggleInventoryUI = null;
         public event Action RotateInventoryItem = null;
         public event Action PickupItem = null;
-        public event Action ToggleMainUI = null;*/
+        public event Action ToggleMainUI = null;
 
         [SerializeField] private Vector2 _mouseSensitivity = Vector2.one;
 
-        private readonly IReadOnlyCollection<KeyCode> _keyCodes = new HashSet<KeyCode>(Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>());
-        private readonly Dictionary<KeyCode, bool> _keys = new Dictionary<KeyCode, bool>();
-        private readonly Dictionary<KeyCode, bool> _keysPressedInCurrentFrame = new Dictionary<KeyCode, bool>();
-        private readonly Dictionary<KeyCode, bool> _keysReleasedInCurrentFrame = new Dictionary<KeyCode, bool>();
+        //private readonly IReadOnlyCollection<KeyCode> _keyCodes = new HashSet<KeyCode>(Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>());
+        //private readonly Dictionary<KeyCode, bool> _keys = new Dictionary<KeyCode, bool>();
+        //private readonly Dictionary<KeyCode, bool> _keysPressedInCurrentFrame = new Dictionary<KeyCode, bool>();
+        //private readonly Dictionary<KeyCode, bool> _keysReleasedInCurrentFrame = new Dictionary<KeyCode, bool>();
 
         public Vector3 Direction { get; private set; } = Vector3.zero;
         public Vector2 Rotation { get; private set; } = Vector2.zero;
-        public IReadOnlyDictionary<KeyCode, bool> Keys => _keys;
-        public IReadOnlyDictionary<KeyCode, bool> KeysPressedInCurrentFrame => _keysPressedInCurrentFrame;
-        public IReadOnlyDictionary<KeyCode, bool> KeysReleasedInCurrentFrame => _keysReleasedInCurrentFrame;
+        //public IReadOnlyDictionary<KeyCode, bool> Keys => _keys;
+        //public IReadOnlyDictionary<KeyCode, bool> KeysPressedInCurrentFrame => _keysPressedInCurrentFrame;
+        //public IReadOnlyDictionary<KeyCode, bool> KeysReleasedInCurrentFrame => _keysReleasedInCurrentFrame;
         public bool IsEnabled { get; private set; } = true;
+        public bool SlowDownPressed { get; private set; } = false;
 
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            foreach (var key in _keyCodes)
+            /*foreach (var key in _keyCodes)
             {
                 _keys[key] = false;
                 _keysPressedInCurrentFrame[key] = false;
                 _keysReleasedInCurrentFrame[key] = false;
-            }
+            }*/
         }
 
         private void Update()
@@ -67,12 +68,35 @@ namespace Astetrio.Spaceship
                 Rotation = Vector2.zero;
             }
 
-            foreach (var key in _keyCodes)
+            SlowDownPressed = Input.GetKey(KeyCode.Q);
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                ToggleInventoryUI?.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                RotateInventoryItem?.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                PickupItem?.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                ToggleMainUI?.Invoke();
+            }
+
+            //public event Action ToggleInventoryUI = null;
+            //public event Action RotateInventoryItem = null;
+            //public event Action PickupItem = null;
+            //public event Action ToggleMainUI = null;
+
+            /*foreach (var key in _keyCodes)
             {
                 _keys[key] = Input.GetKey(key);
                 _keysPressedInCurrentFrame[key] = Input.GetKeyDown(key);
                 _keysReleasedInCurrentFrame[key] = Input.GetKeyUp(key);
-            }
+            }*/
         }
 
         public void Enable()
